@@ -6,7 +6,7 @@ function love.load()
     player.body = love.physics.newBody(WorldSpace, love.graphics:getWidth()/2, love.graphics:getHeight()/2, "dynamic")
     player.shape = love.physics.newCircleShape(10)
     player.fixture = love.physics.newFixture(player.body, player.shape)
-
+    x, y = 0
     entities = {}
 end 
 function love.update(dt)
@@ -34,7 +34,8 @@ function love.draw()
         function love.draw()
             local joysticks = love.joystick.getJoysticks()
             for i, joystick in ipairs(joysticks) do
-                love.graphics.print(joystick:getName(), 10, i * 20)
+                x, y =  joystick:getAxes()
+                love.graphics.print(joystick:getName().. "  " .. x.."/"..y, 10, i * 20)
             end
         end
     end
