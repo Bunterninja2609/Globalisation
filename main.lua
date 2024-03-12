@@ -6,7 +6,9 @@ function love.load()
     player.body = love.physics.newBody(WorldSpace, love.graphics:getWidth()/2, love.graphics:getHeight()/2, "dynamic")
     player.shape = love.physics.newCircleShape(10)
     player.fixture = love.physics.newFixture(player.body, player.shape)
-end
+
+    entities = {}
+end 
 function love.update(dt)
     if WorldStatus == "Map" then 
         
@@ -52,4 +54,11 @@ function WASD(object, speed)
         velocityX = velocityX - 1
     end
     object:setLinearVelocity(velocityX * speed, velocityY * speed)
+end
+
+function spawnEntity(type, x, y)
+    local entity = require("entities/"..type)
+    entity.x = x or 0
+    entity.y = y or 0
+    table.insert(entities, entity)
 end
