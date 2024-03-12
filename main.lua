@@ -1,7 +1,7 @@
 function love.load()
     WorldSpace = love.physics.newWorld(0, 0)
     love.physics.setMeter(1)
-    WorldStatus = "InLevel"
+    WorldStatus = "BossFight"
     player = {}
     player.body = love.physics.newBody(WorldSpace, love.graphics:getWidth()/2, love.graphics:getHeight()/2, "dynamic")
     player.shape = love.physics.newCircleShape(10)
@@ -29,6 +29,12 @@ function love.draw()
         love.graphics.pop()
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
+        function love.draw()
+            local joysticks = love.joystick.getJoysticks()
+            for i, joystick in ipairs(joysticks) do
+                love.graphics.print(joystick:getName(), 10, i * 20)
+            end
+        end
     end
 end
 function WASD(object, speed)
