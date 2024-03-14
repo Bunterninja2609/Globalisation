@@ -3,7 +3,7 @@ function love.load()
     love.physics.setMeter(1)
     WorldStatus = "InLevel"
     player = {}
-    player.isWasdSteering = false
+    player.isWasdSteering = true
     player.body = love.physics.newBody(WorldSpace, love.graphics:getWidth()/2, love.graphics:getHeight()/2, "dynamic")
     player.shape = love.physics.newCircleShape(10)
     player.fixture = love.physics.newFixture(player.body, player.shape)
@@ -13,6 +13,7 @@ function love.load()
     joystick1X, joystick1Y, joystick2X, joystick2Y = 0, 0, 0, 0
 
     entities = {}
+    
 end 
 function love.update(dt)
     if #joysticks >= 1 then
@@ -21,12 +22,10 @@ function love.update(dt)
     if WorldStatus == "Map" then 
         
     elseif WorldStatus == "InLevel" then
-        joysticks[1]:setVibration(0, 0)
-        if joysticks[1]:isDown(11) then
-            spawnEntity("enemy1", math.random(0,1000))
-            joysticks[1]:setVibration(1,1)
+        if love.keyboard.isDown("space") then
+            spawnEntity("enemy1", 0, 0)
         end
-        
+        updateEntities(dt)
         steer(player.body, 200, player.isWasdSteering)
         
     elseif WorldStatus == "BossFight" then
@@ -40,7 +39,7 @@ function love.draw()
     elseif WorldStatus == "InLevel" then
         love.graphics.setBackgroundColor(0, 0.5, 1)
         love.graphics.push()
-            --love.graphics.translate(-player.body:getX() + love.graphics:getWidth()/2, -player.body:getY() + love.graphics:getHeight()/2)
+            love.graphics.translate(-player.body:getX() + love.graphics:getWidth()/2, -player.body:getY() + love.graphics:getHeight()/2)
             drawEntities()
             love.graphics.setColor(1, 1, 1)
             love.graphics.circle("fill", player.body:getX(), player.body:getY(), 10)
@@ -66,7 +65,6 @@ function steer(object, speed, wasd)
         if love.keyboard.isDown("a") then
             velocityX = velocityX - 1
         end
-
             object:setLinearVelocity(velocityX * speed, velocityY * speed)
     else
         player.direction = math.atan2(math.floor(joystick2Y*10)/10 ,math.floor(joystick2X*10)/10)
@@ -76,13 +74,34 @@ function steer(object, speed, wasd)
 end
 
 function spawnEntity(type, x, y)
-    local entity = require("entities/"..type)
-    entity.data.x = x or 0
-    entity.data.y = y or 0
-    table.insert(entities, entity)
+    local entityPrefab = require("entities/".. type)  -- Load the entity module
+    local entity = {}                   -- Create a new table for the entity instance
+    for key, value in pairs(entityPrefab) do
+        entity[key] = value             -- Copy methods from the entity module to the instance
+    end
+    entity.x = x or entity.x
+    entity.y = y or entity.y
+    entity:load()                       -- Initialize the entity
+    table.insert(entities, entity)      -- Insert the new entity into the entities table
 end
 function drawEntities()
     for _, entity in ipairs(entities) do
+        
         entity:draw()
+    end
+end
+function updateEntities(dt)
+    for _, entity in ipairs(entities) do
+        entity:update(dt)
+    end
+end
+
+function love.keypressed(key)
+    if key == "1" then
+        WorldStatus = "Map"
+    elseif key == "2" then
+        WorldStatus = "InLevel"
+    elseif key == "3" then
+        WorldStatus = "BossFight"
     end
 end
