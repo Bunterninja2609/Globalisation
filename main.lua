@@ -2,6 +2,7 @@ function love.load()
     WorldSpace = love.physics.newWorld(0, 0)
     love.physics.setMeter(1)
     WorldStatus = "InLevel"
+    ShowHitboxes = true
     player = {}
     player.isWasdSteering = true
     player.body = love.physics.newBody(WorldSpace, love.graphics:getWidth()/2, love.graphics:getHeight()/2, "dynamic")
@@ -9,6 +10,7 @@ function love.load()
     player.fixture = love.physics.newFixture(player.body, player.shape)
     player.direction = 0
     player.directionStrength = 0
+    player.health = 100
     joysticks = love.joystick.getJoysticks()
     joystick1X, joystick1Y, joystick2X, joystick2Y = 0, 0, 0, 0
 
@@ -27,11 +29,13 @@ function love.update(dt)
         end
         updateEntities(dt)
         steer(player.body, 200, player.isWasdSteering)
+        WorldSpace:update(dt)
         
     elseif WorldStatus == "BossFight" then
 
+
     end
-    WorldSpace:update(dt)
+    
 end
 function love.draw()
     if WorldStatus == "Map" then 
@@ -45,6 +49,7 @@ function love.draw()
             love.graphics.circle("fill", player.body:getX(), player.body:getY(), 10)
             love.graphics.setColor(1, 0, 0)
             love.graphics.circle("fill", player.body:getX() + 20 * math.cos(player.direction) * player.directionStrength, player.body:getY()  + 20 * math.sin(player.direction) * player.directionStrength, 3)
+            drawHitboxes(WorldSpace)
         love.graphics.pop()
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
@@ -103,5 +108,33 @@ function love.keypressed(key)
         WorldStatus = "InLevel"
     elseif key == "3" then
         WorldStatus = "BossFight"
+    end
+end
+
+function drawHitboxes(world)
+    love.graphics.setColor(1,1,1,0.5)
+    -- Iterate through all bodies in the physics world
+    for _, body in pairs(world:getBodies()) do
+        -- Iterate through all fixtures of the body
+        for _, fixture in pairs(body:getFixtures()) do
+            -- Get the shape type of the fixture
+            local shapeType = fixture:getShape():getType()
+
+            -- Draw hitbox based on shape type
+            if shapeType == "circle" then
+                local x, y = body:getWorldPoint(fixture:getShape():getPoint())
+                local radius = fixture:getShape():getRadius()
+                love.graphics.circle("line", x, y, radius)
+            elseif shapeType == "polygon" then
+                local vertices = {body:getWorldPoints(fixture:getShape():getPoints())}
+                love.graphics.polygon("line", vertices)
+            elseif shapeType == "edge" then
+                local x1, y1, x2, y2 = body:getWorldPoints(fixture:getShape():getPoints())
+                love.graphics.line(x1, y1, x2, y2)
+            elseif shapeType == "chain" then
+                local points = {body:getWorldPoints(fixture:getShape():getPoints())}
+                love.graphics.line(points)
+            end
+        end
     end
 end
