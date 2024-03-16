@@ -25,7 +25,7 @@ function love.update(dt)
         
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("enemy1", 0, 0)
+            spawnEntity("chest", 0, 0, "hello")
         end
         updateEntities(dt)
         steer(player.body, 200, player.isWasdSteering)
@@ -78,7 +78,7 @@ function steer(object, speed, wasd)
     end
 end
 
-function spawnEntity(type, x, y)
+function spawnEntity(type, x, y, ...)
     local entityPrefab = require("entities/".. type)  -- Load the entity module
     local entity = {}                   -- Create a new table for the entity instance
     for key, value in pairs(entityPrefab) do
@@ -86,7 +86,7 @@ function spawnEntity(type, x, y)
     end
     entity.x = x or entity.x
     entity.y = y or entity.y
-    entity:load()                       -- Initialize the entity
+    entity:load(...)                       -- Initialize the entity
     table.insert(entities, entity)      -- Insert the new entity into the entities table
 end
 function drawEntities()
