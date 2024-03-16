@@ -1,11 +1,14 @@
 function love.load()
+    love.graphics.setDefaultFilter("nearest", "nearest")
+    love.graphics.setNewFont(20)
     WorldSpace = love.physics.newWorld(0, 0)
+    Scale = 5
     love.physics.setMeter(1)
     WorldStatus = "InLevel"
-    ShowHitboxes = true
+    ShowHitboxes = false
     player = {}
     player.isWasdSteering = true
-    player.body = love.physics.newBody(WorldSpace, love.graphics:getWidth()/2, love.graphics:getHeight()/2, "dynamic")
+    player.body = love.physics.newBody(WorldSpace, 0, 0, "dynamic")
     player.shape = love.physics.newCircleShape(10)
     player.fixture = love.physics.newFixture(player.body, player.shape)
     player.direction = 0
@@ -15,6 +18,7 @@ function love.load()
     joystick1X, joystick1Y, joystick2X, joystick2Y = 0, 0, 0, 0
 
     entities = {}
+    UI = {}
     
 end 
 function love.update(dt)
@@ -25,7 +29,7 @@ function love.update(dt)
         
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("chest", 0, 0, "hello")
+            spawnEntity("chest", 0, 0, "heeeeeeeeeeeeesqrwdtfzgjkxsghrfcehwdhjmfjzvjksdhbertkxsjdhmgfhukjdcesztufdhsgfjuijkdlshgfrzuhjbnhjghgfdysfgtrztugjmcjxstdrutgjkhgdzuritzkgjhfgdzrutjgkxfgtdzrtuigjhvgzjrghllo")
         end
         updateEntities(dt)
         steer(player.body, 200, player.isWasdSteering)
@@ -43,7 +47,9 @@ function love.draw()
     elseif WorldStatus == "InLevel" then
         love.graphics.setBackgroundColor(0, 0.5, 1)
         love.graphics.push()
-            love.graphics.translate(-player.body:getX() + love.graphics:getWidth()/2, -player.body:getY() + love.graphics:getHeight()/2)
+            love.graphics.scale(Scale)
+            love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
+            
             drawEntities()
             love.graphics.setColor(1, 1, 1)
             love.graphics.circle("fill", player.body:getX(), player.body:getY(), 10)
@@ -54,6 +60,7 @@ function love.draw()
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
     end
+    drawUi()
 end
 function steer(object, speed, wasd)
     if wasd then
@@ -112,29 +119,54 @@ function love.keypressed(key)
 end
 
 function drawHitboxes(world)
-    love.graphics.setColor(1,1,1,0.5)
-    -- Iterate through all bodies in the physics world
-    for _, body in pairs(world:getBodies()) do
-        -- Iterate through all fixtures of the body
-        for _, fixture in pairs(body:getFixtures()) do
-            -- Get the shape type of the fixture
-            local shapeType = fixture:getShape():getType()
+    if ShowHitboxes then
+        love.graphics.setColor(1,1,1,0.5)
+        -- Iterate through all bodies in the physics world
+        for _, body in pairs(world:getBodies()) do
+            -- Iterate through all fixtures of the body
+            for _, fixture in pairs(body:getFixtures()) do
+                -- Get the shape type of the fixture
+                local shapeType = fixture:getShape():getType()
 
-            -- Draw hitbox based on shape type
-            if shapeType == "circle" then
-                local x, y = body:getWorldPoint(fixture:getShape():getPoint())
-                local radius = fixture:getShape():getRadius()
-                love.graphics.circle("line", x, y, radius)
-            elseif shapeType == "polygon" then
-                local vertices = {body:getWorldPoints(fixture:getShape():getPoints())}
-                love.graphics.polygon("line", vertices)
-            elseif shapeType == "edge" then
-                local x1, y1, x2, y2 = body:getWorldPoints(fixture:getShape():getPoints())
-                love.graphics.line(x1, y1, x2, y2)
-            elseif shapeType == "chain" then
-                local points = {body:getWorldPoints(fixture:getShape():getPoints())}
-                love.graphics.line(points)
+                -- Draw hitbox based on shape type
+                if shapeType == "circle" then
+                    local x, y = body:getWorldPoint(fixture:getShape():getPoint())
+                    local radius = fixture:getShape():getRadius()
+                    love.graphics.circle("line", x, y, radius)
+                elseif shapeType == "polygon" then
+                    local vertices = {body:getWorldPoints(fixture:getShape():getPoints())}
+                    love.graphics.polygon("line", vertices)
+                elseif shapeType == "edge" then
+                    local x1, y1, x2, y2 = body:getWorldPoints(fixture:getShape():getPoints())
+                    love.graphics.line(x1, y1, x2, y2)
+                elseif shapeType == "chain" then
+                    local points = {body:getWorldPoints(fixture:getShape():getPoints())}
+                    love.graphics.line(points)
+                end
             end
         end
+    end
+end
+
+function addUi(text, x, y, height, width)
+    local ui = {
+        x = x or 0,
+        y =  y or 0,
+        width = width or 400,
+        height = height or 150,
+        text = text
+    }
+    table.insert(UI, ui)
+end
+function drawUi()
+    for _, ui in ipairs(UI) do
+        love.graphics.setColor(0.5,0.5,0.5)
+        love.graphics.rectangle("fill", ui.x, ui.y, ui.width, ui.height)
+        love.graphics.setColor(1,1,1)
+        love.graphics.rectangle("fill", ui.x + Scale, ui.y + Scale, ui.width - Scale*2, ui.height - Scale*2)
+        love.graphics.setColor(0.5,0.5,0.5)
+        love.graphics.rectangle("fill", ui.x + Scale*2, ui.y + Scale*2, ui.width - Scale*4, ui.height - Scale*4)
+        love.graphics.setColor(1,1,1)
+        love.graphics.printf(ui.text, ui.x + Scale*2, ui.y + Scale*2, ui.width - Scale*4)
     end
 end
