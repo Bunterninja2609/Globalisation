@@ -7,7 +7,7 @@ function love.load()
     WorldStatus = "InLevel"
     ShowHitboxes = false
     player = {}
-    player.isWasdSteering = false
+    player.isWasdSteering = true
     player.body = love.physics.newBody(WorldSpace, 0, 0, "dynamic")
     player.shape = love.physics.newCircleShape(10)
     player.fixture = love.physics.newFixture(player.body, player.shape)
@@ -29,8 +29,8 @@ function love.update(dt)
         
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("chest", math.random(-100, 100), math.random(-100, 100), "heeeeeeeeeeeeesqrwdtfzgjkxsghrfcehwdhjmfjzvjksdhbertkxsjdhmgfhukjdcesztufdhsgfjuijkdlshgfrzuhjbnhjghgfdysfgtrztugjmcjxstdrutgjkhgdzuritzkgjhfgdzrutjgkxfgtdzrtuigjhvgzjrghllo")
-        end
+            spawnEntity("template", math.random(-100, 100), math.random(-100, 100), "")
+  end
         updateEntities(dt)
         steer(player.body, 200, player.isWasdSteering)
         WorldSpace:update(dt)
@@ -174,4 +174,15 @@ function drawUi(buffer)
         love.graphics.printf(ui.text, ui.x + Scale*2, ui.y + Scale*2, ui.width - Scale*4)
     end
     UI = {}
+end
+
+function newTextureSheet(image,width,height,xDensity,yDensity)
+    local textureSheet = {}
+    for i = 1, yDensity do
+        textureSheet[i] = {}
+        for j = 1, xDensity do
+            textureSheet[i][j] = love.graphics.newQuad(0 + (j-1) * width, 0 + (i-1) * height, width, height, image)
+        end
+    end
+    return textureSheet
 end
