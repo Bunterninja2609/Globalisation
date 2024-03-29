@@ -33,6 +33,7 @@ function entity:update(dt)
         self.hitCooldownTimer = self.hitCooldown
         player.health = player.health - self.damage
     end
+    ---[[
     self.direction = math.atan2(player.body:getX() - self.x, player.body:getY() - self.y)
     self.x, self.y = self.body:getPosition()
     if self.direction > math.pi/4 and self.direction < 3 * math.pi/4 then
@@ -44,6 +45,7 @@ function entity:update(dt)
     else
         self.currentFrame = self.frames[4][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
     end
+    --]]
 end
 function entity:draw()
     love.graphics.setColor(1,1,1,1)
