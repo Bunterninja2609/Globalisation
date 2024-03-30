@@ -5,11 +5,11 @@ function love.load()
     Scale = 5
     love.physics.setMeter(1)
     WorldStatus = "InLevel"
-    ShowHitboxes = false
+    ShowHitboxes = true
     player = {}
     player.isWasdSteering = true
     player.body = love.physics.newBody(WorldSpace, 0, 0, "dynamic")
-    player.shape = love.physics.newCircleShape(10)
+    player.shape = love.physics.newCircleShape(8)
     player.fixture = love.physics.newFixture(player.body, player.shape)
     player.direction = 0
     player.directionStrength = 0
@@ -19,7 +19,7 @@ function love.load()
 
     entities = {}
     UI = {}
-    
+    spawnEntity("door",0,0, "up")
 end 
 function love.update(dt)
     if #joysticks >= 1 then
@@ -29,7 +29,7 @@ function love.update(dt)
         
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("template", math.random(-100, 100), math.random(-100, 100), "")
+            spawnEntity("wizard", math.random(-100, 100), math.random(-100, 100), "")
   end
         updateEntities(dt)
         steer(player.body, 200, player.isWasdSteering)
@@ -49,13 +49,12 @@ function love.draw()
         love.graphics.push()
             love.graphics.scale(Scale)
             love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
-            
-            drawEntities()
             love.graphics.setColor(1, 1, 1)
-            love.graphics.circle("fill", player.body:getX(), player.body:getY(), 10)
+            love.graphics.circle("fill", player.body:getX(), player.body:getY(), 8)
             love.graphics.setColor(1, 0, 0)
-            love.graphics.circle("fill", player.body:getX() + 20 * math.cos(player.direction) * player.directionStrength, player.body:getY()  + 20 * math.sin(player.direction) * player.directionStrength, 3)
+            love.graphics.circle("fill", player.body:getX() + 20 * math.cos(player.direction) * player.directionStrength, player.body:getY()  + 20 * math.sin(player.direction) * player.directionStrength, 2)
             drawHitboxes(WorldSpace)
+            drawEntities()
         love.graphics.pop()
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
@@ -97,8 +96,8 @@ function spawnEntity(type, x, y, ...)
     table.insert(entities, entity)      -- Insert the new entity into the entities table
 end
 function drawEntities()
+    table.sort()
     for _, entity in ipairs(entities) do
-        
         entity:draw()
     end
 end
@@ -185,4 +184,8 @@ function newTextureSheet(image,width,height,xDensity,yDensity)
         end
     end
     return textureSheet
+end
+
+function getDirection(x1, y1, x2, y2)
+    return math.atan2(x2 - x1, y2 - y1) - 1/2 * math.pi
 end
