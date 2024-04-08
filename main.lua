@@ -4,8 +4,9 @@ function love.load()
     WorldSpace = love.physics.newWorld(0, 0)
     Scale = 5
     love.physics.setMeter(1)
-    WorldStatus = "InLevel"
+    WorldStatus = "Map"
     ShowHitboxes = true
+    WorldMap = love.graphics.newImage("textures/world.png")
     player = {}
     player.isWasdSteering = true
     player.body = love.physics.newBody(WorldSpace, 0, 0, "dynamic")
@@ -43,7 +44,9 @@ function love.update(dt)
 end
 function love.draw()
     if WorldStatus == "Map" then 
+        love.window.setMode(WorldMap:getWidth()*5, WorldMap:getHeight()*5)
         love.graphics.setBackgroundColor(0, 1, 0)
+        love.graphics.draw(WorldMap, 0, 0, 0, 5)
     elseif WorldStatus == "InLevel" then
         love.graphics.setBackgroundColor(0, 0.5, 1)
         love.graphics.push()
@@ -96,7 +99,7 @@ function spawnEntity(type, x, y, ...)
     table.insert(entities, entity)      -- Insert the new entity into the entities table
 end
 function drawEntities()
-    table.sort()
+    table.sort(entities, function (a, b) return a.z < b.z end)
     for _, entity in ipairs(entities) do
         entity:draw()
     end
