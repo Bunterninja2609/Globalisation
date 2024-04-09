@@ -32,8 +32,9 @@ function love.update(dt)
         if love.keyboard.isDown("space") then
             spawnEntity("wizard", math.random(-100, 100), math.random(-100, 100), "")
   end
-        updateEntities(dt)
+        
         steer(player.body, 200, player.isWasdSteering)
+        updateEntities(dt)
         WorldSpace:update(dt)
         
     elseif WorldStatus == "BossFight" then
@@ -52,7 +53,7 @@ function love.draw()
         love.graphics.push()
             love.graphics.scale(Scale)
             love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
-            love.graphics.setColor(1, 1, 1)
+            love.graphics.setColor(1/player.health, 1/player.health, 1/player.health)
             love.graphics.circle("fill", player.body:getX(), player.body:getY(), 8)
             love.graphics.setColor(1, 0, 0)
             love.graphics.circle("fill", player.body:getX() + 20 * math.cos(player.direction) * player.directionStrength, player.body:getY()  + 20 * math.sin(player.direction) * player.directionStrength, 2)

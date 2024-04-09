@@ -6,14 +6,14 @@ entity.direction = 0
 entity.speed = 8
 entity.isExistent = true
 entity.texture = love.graphics.newImage("textures/wizard.png")
-entity.frames = newTextureSheet(entity.texture, 16, 16, 5, 4)
+entity.frames = newTextureSheet(entity.texture, 16, 16, 5, 8)
 entity.frameCooldown = 0.2
 entity.animationTimer = 0
 entity.currentFrame = entity.frames[1][1]
-entity.range = 300
-entity.hitCooldown = 5
-entity.hitCooldownTimer = 5
-entity.damage = 10
+entity.range = 100
+entity.hitCooldown = 1
+entity.hitCooldownTimer = 1
+entity.damage = 1
 entity.isMoving = false
 
 function entity:load()
@@ -35,16 +35,15 @@ function entity:update(dt)
     
     self.body:setLinearVelocity(0,0)
     
-    
-    if love.physics.getDistance(player.fixture, self.fixture) < self.range  --[[ or  joysticks[1]:isDown(4) --]] then
-        self.body:setLinearVelocity(self.speed * math.cos(self.direction), -self.speed * math.sin(self.direction))
-    end
+    self.body:setLinearVelocity(self.speed * math.cos(self.direction), -self.speed * math.sin(self.direction))
     self.hitCooldownTimer = self.hitCooldownTimer - dt
         --[[ deal damage --]]
     if love.physics.getDistance(player.fixture, self.fixture) < self.range and self.hitCooldownTimer <= 0 then
         self.hitCooldownTimer = self.hitCooldown
         player.health = player.health - self.damage
     end
+    player.health = player.health - self.damage
+    self.hitCooldownTimer = self.hitCooldownTimer - dt
     ---[[
     self.direction = getDirection(self.x, self.y, player.body:getX(), player.body:getY())
     self.direction = self.direction % (2*math.pi)
