@@ -14,6 +14,7 @@ function entity:load(text)
     self.text = text
 end
 function entity:update(dt)
+    self.z = self.y
     self.body:setLinearVelocity(0,0)
 
     if love.physics.getDistance(player.fixture, self.fixture) < 30 and (love.keyboard.isDown("e") --[[ or joysticks[1]:isDown(4) --]] ) then
