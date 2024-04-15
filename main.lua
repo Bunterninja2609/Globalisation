@@ -1,12 +1,16 @@
+
 function love.load()
+    sti = require("librarys/sti")
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setNewFont(20)
     WorldSpace = love.physics.newWorld(0, 0)
-    Scale = 5
+    Scale = 1
     love.physics.setMeter(1)
     WorldStatus = "Map"
+    CurrentMap = sti("maps/map.lua")
     ShowHitboxes = true
     WorldMap = love.graphics.newImage("textures/world.png")
+    Walls = {}
     player = {}
     player.isWasdSteering = true
     player.body = love.physics.newBody(WorldSpace, 0, 0, "dynamic")
@@ -18,9 +22,10 @@ function love.load()
     joysticks = love.joystick.getJoysticks()
     joystick1X, joystick1Y, joystick2X, joystick2Y = 0, 0, 0, 0
 
-    entities = {}
+    Entities = {}
     UI = {}
-    spawnEntity("door",0,0, "up")
+    spawnEntity("door", 0, 0, "up")
+    enterNewLevel("Map")
 end 
 function love.update(dt)
     if #joysticks >= 1 then
@@ -30,7 +35,7 @@ function love.update(dt)
         
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("wizard", math.random(-100, 100), math.random(-100, 100), "")
+            spawnEntity("wizard", math.random(-100, 100), math.random(-100, 100), "up")
   end
         
         steer(player.body, 200, player.isWasdSteering)
@@ -49,7 +54,7 @@ function love.draw()
         love.graphics.setBackgroundColor(0, 1, 0)
         love.graphics.draw(WorldMap, 0, 0, 0, 5)
     elseif WorldStatus == "InLevel" then
-        love.graphics.setBackgroundColor(0, 0.5, 1)
+        love.graphics.setBackgroundColor(50/256, 115/256, 69/256)
         love.graphics.push()
             love.graphics.scale(Scale)
             love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
@@ -87,9 +92,46 @@ function steer(object, speed, wasd)
         object:setLinearVelocity(math.floor(joystick1X*10)/10 * speed, math.floor(joystick1Y*10)/10 * speed)
     end
 end
+function enterNewLevel(map, playerX, playerY)
+    CurrentMap = sti("maps/"..map..".lua")
+    for _, wall in ipairs(Walls) do
+        wall.fixture:destroy()
+    end
+    Walls = {}
+    for _, entity in ipairs(Entities) do
+        entity.fixture:destroy()
+    end
+    Entities = {}
+    if CurrentMap.layers["WallLayer"] then
+        for _, obj in pairs(CurrentMap.layers["WallLayer"].objects) do
+        local wall = {}
+        wall.body = love.physics.newBody(WorldSpace, obj.x, obj.y, "static")
+        wall.shape = love.physics.newRectangleShape(obj.width/2, obj.height/2, obj.width, obj.height)
+        wall.fixture = love.physics.newFixture(wall.body, wall.shape)
+        table.insert(Walls, wall)
+        end
+    else
+        love = 0
+    end
+    if CurrentMap.layers["EntityLayer"] then
+        for _1, obj in pairs(CurrentMap.layers["EntityLayer"].objects) do
+        local entity = {}
+        entity.properties = {}
+        for _2, property in pairs(obj.properties) do
+            if _2 ~= "name" then
+                table.insert(entity.properties, property)
+            end
+        end
+        spawnEntity(obj.properties.name, obj.x, obj.y, entity.properties)
+        end
+    else
+        love = 0
+    end
+end
+
 
 function spawnEntity(type, x, y, ...)
-    local entityPrefab = require("entities/".. type)  -- Load the entity module
+    local entityPrefab = require("Entities/".. type)  -- Load the entity module
     local entity = {}                   -- Create a new table for the entity instance
     for key, value in pairs(entityPrefab) do
         entity[key] = value             -- Copy methods from the entity module to the instance
@@ -97,16 +139,16 @@ function spawnEntity(type, x, y, ...)
     entity.x = x or entity.x
     entity.y = y or entity.y
     entity:load(...)                       -- Initialize the entity
-    table.insert(entities, entity)      -- Insert the new entity into the entities table
+    table.insert(Entities, entity)      -- Insert the new entity into the Entities table
 end
 function drawEntities()
-    table.sort(entities, function (a, b) return a.z < b.z end)
-    for _, entity in ipairs(entities) do
+    table.sort(Entities, function (a, b) return a.z < b.z end)
+    for _, entity in ipairs(Entities) do
         entity:draw()
     end
 end
 function updateEntities(dt)
-    for _, entity in ipairs(entities) do
+    for _, entity in ipairs(Entities) do
         entity:update(dt)
     end
 end
