@@ -19,10 +19,11 @@ entity.isClosed = true
 function entity:load(mode)
     self.mode = mode
     if mode == "left" or mode == "right" then
-
         self.shape = love.physics.newRectangleShape(4, self.doorSize)
     elseif mode == "up" or mode == "down" then
         self.shape = love.physics.newRectangleShape(self.doorSize, 4)
+    else
+        self.shape = love.physics.newCircleShape(1)
     end
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "static")
     self.fixture = love.physics.newFixture(self.body, self.shape)
@@ -39,10 +40,7 @@ function entity:update(dt)
     end
     self.hitCooldownTimer = self.hitCooldownTimer - dt
         --[[ deal damage --]]
-    if love.physics.getDistance(player.fixture, self.fixture) < self.range and self.hitCooldownTimer <= 0 then
-        self.hitCooldownTimer = self.hitCooldown
-        player.health = player.health - self.damage
-    end
+    
     ---[[
     
     
