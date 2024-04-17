@@ -1,21 +1,22 @@
-
 function love.load()
     sti = require("librarys/sti")
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setNewFont(20)
     WorldSpace = love.physics.newWorld(0, 0)
-    Scale = 1
+    Scale = 4
     love.physics.setMeter(1)
     WorldStatus = "Map"
+    ParticleImage = love.graphics.newImage("textures/particle.png")
+    WorldColor = {r = 1, g = 1, b = 1}
     CurrentMap = sti("maps/map.lua")
     ShowHitboxes = true
     WorldMap = love.graphics.newImage("textures/world.png")
     Walls = {}
     player = {}
     player.isWasdSteering = true
-    player.body = love.physics.newBody(WorldSpace, 0, 0, "dynamic")
-    player.shape = love.physics.newCircleShape(8)
-    player.fixture = love.physics.newFixture(player.body, player.shape)
+    player.body = nil
+    player.shape = nil
+    player.fixture = nil
     player.direction = 0
     player.directionStrength = 0
     player.health = 100
@@ -24,7 +25,7 @@ function love.load()
 
     Entities = {}
     UI = {}
-    spawnEntity("door", 0, 0, "up")
+    
     enterNewLevel("Map")
 end 
 function love.update(dt)
@@ -38,7 +39,6 @@ function love.update(dt)
             spawnEntity("wizard", math.random(-100, 100), math.random(-100, 100), "up")
   end
         
-        steer(player.body, 200, player.isWasdSteering)
         updateEntities(dt)
         WorldSpace:update(dt)
         
@@ -52,17 +52,17 @@ function love.draw()
     if WorldStatus == "Map" then 
         love.window.setMode(WorldMap:getWidth()*5, WorldMap:getHeight()*5)
         love.graphics.setBackgroundColor(0, 1, 0)
+        love.graphics.setColor(1,1,1)
         love.graphics.draw(WorldMap, 0, 0, 0, 5)
     elseif WorldStatus == "InLevel" then
-        love.graphics.setBackgroundColor(50/256, 115/256, 69/256)
+        love.graphics.setBackgroundColor((50/256) * WorldColor.r, (115/256) * WorldColor.g, (69/256) * WorldColor.b)
         love.graphics.push()
             love.graphics.scale(Scale)
             love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
-            love.graphics.setColor(1/player.health, 1/player.health, 1/player.health)
-            love.graphics.circle("fill", player.body:getX(), player.body:getY(), 8)
-            love.graphics.setColor(1, 0, 0)
+            love.graphics.setColor(1 * WorldColor.r, 0 * WorldColor.g, 0 * WorldColor.b)
             love.graphics.circle("fill", player.body:getX() + 20 * math.cos(player.direction) * player.directionStrength, player.body:getY()  + 20 * math.sin(player.direction) * player.directionStrength, 2)
             drawHitboxes(WorldSpace)
+            love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b, 1)
             drawEntities()
         love.graphics.pop()
     elseif WorldStatus == "BossFight" then
@@ -86,6 +86,13 @@ function steer(object, speed, wasd)
             velocityX = velocityX - 1
         end
             object:setLinearVelocity(velocityX * speed, velocityY * speed)
+            player.movementDirection = math.atan2(velocityY, velocityX)
+            player.direction = math.atan2( (love.mouse:getX() / Scale - love.graphics.getWidth()/2/ Scale), (love.mouse:getY()/ Scale - love.graphics.getHeight()/2/ Scale))
+            if love.mouse:isDown(1) then
+                player.directionStrength = player.directionStrength + 1
+            else
+                player.directionStrength = 0
+            end
     else
         player.direction = math.atan2(math.floor(joystick2Y*10)/10 ,math.floor(joystick2X*10)/10)
         player.directionStrength = math.sqrt((math.floor(joystick2Y*10)/10)^2 + (math.floor(joystick2X*10)/10)^2)
@@ -113,6 +120,8 @@ function enterNewLevel(map, playerX, playerY)
     else
         love = 0
     end
+    player.health = 100
+    
     if CurrentMap.layers["EntityLayer"] then
         for _1, obj in pairs(CurrentMap.layers["EntityLayer"].objects) do
         local entity = {}
@@ -128,7 +137,6 @@ function enterNewLevel(map, playerX, playerY)
         love = 0
     end
 end
-
 
 function spawnEntity(type, x, y, ...)
     local entityPrefab = require("Entities/".. type)  -- Load the entity module
@@ -149,7 +157,7 @@ function drawEntities()
 end
 function updateEntities(dt)
     for _, entity in ipairs(Entities) do
-        entity:update(dt)
+        entity:update(dt, _)
     end
 end
 
@@ -157,15 +165,15 @@ function love.keypressed(key)
     if key == "1" then
         WorldStatus = "Map"
     elseif key == "2" then
+        enterNewLevel("Germany")
         WorldStatus = "InLevel"
     elseif key == "3" then
         WorldStatus = "BossFight"
     end
 end
-
 function drawHitboxes(world)
     if ShowHitboxes then
-        love.graphics.setColor(1,1,1,0.5)
+        love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b,0.5)
         -- Iterate through all bodies in the physics world
         for _, body in pairs(world:getBodies()) do
             -- Iterate through all fixtures of the body
@@ -192,7 +200,6 @@ function drawHitboxes(world)
         end
     end
 end
-
 function addUi(text, x, y, height, width)
     local ui = {
         x = x or 0,
@@ -220,7 +227,6 @@ function drawUi(buffer)
     end
     UI = {}
 end
-
 function newTextureSheet(image,width,height,xDensity,yDensity)
     local textureSheet = {}
     for i = 1, yDensity do
@@ -231,7 +237,15 @@ function newTextureSheet(image,width,height,xDensity,yDensity)
     end
     return textureSheet
 end
-
 function getDirection(x1, y1, x2, y2)
     return math.atan2(x2 - x1, y2 - y1) - 1/2 * math.pi
+end
+function gameOver()
+    WorldColor.r = WorldColor.r - 0.01
+    WorldColor.g = WorldColor.g - 0.01
+    WorldColor.b = WorldColor.b - 0.01
+    if WorldColor.r <= 0 and WorldColor.g <= 0 and WorldColor.b <= 0 then
+        WorldStatus = "Map"
+        WorldColor = {r = 1, g = 1, b = 1}
+    end
 end
