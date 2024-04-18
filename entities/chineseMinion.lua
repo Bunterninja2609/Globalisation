@@ -14,8 +14,8 @@ entity.invincibilityFramesTimer = 0.2
 entity.animationTimer = 0
 entity.currentFrame = entity.frames[1][1]
 entity.range = 10
-entity.hitCooldown = 1
-entity.hitCooldownTimer = 1
+entity.hitCooldown = 2
+entity.hitCooldownTimer = 0
 entity.damage = 1
 entity.isMoving = false
 entity.health = 100
@@ -54,7 +54,11 @@ function entity:update(dt, _)
     end
     self.hitCooldownTimer = self.hitCooldownTimer - dt
     ---[[
-    self.direction = getDirection(self.x, self.y, player.body:getX(), player.body:getY())
+    if self.hitCooldownTimer <= 0 then
+        self.direction = getDirection(self.x, self.y, player.body:getX(), player.body:getY())
+    else
+        self.direction = getDirection(player.body:getX(), player.body:getY(), self.x, self.y)
+    end
     self.direction = self.direction % (2*math.pi)
     self.x, self.y = self.body:getPosition()
     if self.direction > (1/2) * math.pi and self.direction < (3/2) * math.pi then
@@ -63,12 +67,8 @@ function entity:update(dt, _)
         self.currentFrame = self.frames[1][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
     end
     if self.health <= 0 then
-        for i = 0, 3 do
-            spawnEntity("wizard", self.x, self.y)
-        end
         self.fixture:destroy()
         table.remove(Entities, _)
-
     end
     --]]
 end
