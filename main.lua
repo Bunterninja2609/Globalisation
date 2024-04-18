@@ -36,7 +36,7 @@ function love.update(dt)
         
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("wizard", math.random(-100, 100), math.random(-100, 100), "up")
+            spawnEntity("chineseBoss", math.random(-100, 100), math.random(-100, 100))
   end
         
         updateEntities(dt)
@@ -165,7 +165,7 @@ function love.keypressed(key)
     if key == "1" then
         WorldStatus = "Map"
     elseif key == "2" then
-        enterNewLevel("Germany")
+        enterNewLevel("India")
         WorldStatus = "InLevel"
     elseif key == "3" then
         WorldStatus = "BossFight"

@@ -19,7 +19,7 @@ entity.range = 16
 entity.radius = 1/2*math.pi
 entity.hitCooldown = 0.5
 entity.hitCooldownTimer = 0.5
-entity.damage = 1000
+entity.damage = 10
 entity.isMoving = false
 
 function entity:load()
@@ -56,6 +56,7 @@ function entity:update(dt)
         for _, individualEntity in ipairs(Entities) do
             if love.physics.getDistance(self.fixture, individualEntity.fixture) < self.range and self.fixture ~= individualEntity.fixture and individualEntity.health and math.sqrt((getDirection(player.body:getX(), player.body:getY(), individualEntity.body:getX(), individualEntity.body:getY())+ 1/2*math.pi - player.direction)^2) < self.radius then
                 individualEntity.health = individualEntity.health - self.damage
+                individualEntity.invincibilityFramesTimer = individualEntity.invincibilityFrames
             end
         end
     end

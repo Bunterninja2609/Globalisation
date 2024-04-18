@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 4,
-  nextobjectid = 54,
+  nextobjectid = 64,
   properties = {},
   tilesets = {},
   layers = {
@@ -325,9 +325,9 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 320,
+          x = 208,
           y = 464,
-          width = 144,
+          width = 256,
           height = 16,
           rotation = 0,
           visible = true,
@@ -436,6 +436,32 @@ return {
           rotation = 0,
           visible = true,
           properties = {}
+        },
+        {
+          id = 60,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 560,
+          width = 128,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 61,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 464,
+          width = 16,
+          height = 112,
+          rotation = 0,
+          visible = true,
+          properties = {}
         }
       }
     },
@@ -474,7 +500,7 @@ return {
           type = "",
           shape = "point",
           x = 480,
-          y = 480,
+          y = 464,
           width = 0,
           height = 0,
           rotation = 0,
@@ -489,8 +515,8 @@ return {
           name = "",
           type = "",
           shape = "point",
-          x = 624,
-          y = 560,
+          x = 640,
+          y = 544,
           width = 0,
           height = 0,
           rotation = 0,
@@ -505,8 +531,8 @@ return {
           name = "",
           type = "",
           shape = "point",
-          x = 336,
-          y = 560,
+          x = 320,
+          y = 544,
           width = 0,
           height = 0,
           rotation = 0,
@@ -517,19 +543,18 @@ return {
           }
         },
         {
-          id = 32,
+          id = 63,
           name = "",
           type = "",
           shape = "point",
-          x = 768,
-          y = 560,
+          x = 480,
+          y = 544,
           width = 0,
           height = 0,
           rotation = 0,
           visible = true,
           properties = {
-            ["name"] = "chest",
-            ["text"] = "xyz"
+            ["name"] = "chineseBoss"
           }
         }
       }

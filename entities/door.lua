@@ -17,10 +17,10 @@ entity.damage = 10
 entity.isClosed = true
 
 function entity:load(mode)
-    self.mode = mode
-    if mode == "left" or mode == "right" then
+    self.mode = mode[1]
+    if self.mode == "left" or self.mode == "right" then
         self.shape = love.physics.newRectangleShape(4, self.doorSize)
-    elseif mode == "up" or mode == "down" then
+    elseif self.mode == "up" or self.mode == "down" then
         self.shape = love.physics.newRectangleShape(self.doorSize, 4)
     else
         self.shape = love.physics.newCircleShape(1)
