@@ -9,10 +9,74 @@ return {
   height = 64,
   tilewidth = 16,
   tileheight = 16,
-  nextlayerid = 5,
+  nextlayerid = 6,
   nextobjectid = 82,
   properties = {},
-  tilesets = {},
+  tilesets = {
+    {
+      name = "tileset",
+      firstgid = 1,
+      class = "",
+      tilewidth = 16,
+      tileheight = 16,
+      spacing = 0,
+      margin = 0,
+      columns = 9,
+      image = "../../../../Downloads/GlobalTileset.png",
+      imagewidth = 144,
+      imageheight = 144,
+      objectalignment = "unspecified",
+      tilerendersize = "tile",
+      fillmode = "stretch",
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 16,
+        height = 16
+      },
+      properties = {},
+      wangsets = {},
+      tilecount = 81,
+      tiles = {}
+    },
+    {
+      name = "GlobalTileset",
+      firstgid = 82,
+      class = "",
+      tilewidth = 16,
+      tileheight = 16,
+      spacing = 0,
+      margin = 0,
+      columns = 9,
+      image = "../../../../Downloads/GlobalTileset.png",
+      imagewidth = 144,
+      imageheight = 144,
+      objectalignment = "unspecified",
+      tilerendersize = "tile",
+      fillmode = "stretch",
+      tileoffset = {
+        x = 0,
+        y = 0
+      },
+      grid = {
+        orientation = "orthogonal",
+        width = 16,
+        height = 16
+      },
+      properties = {},
+      wangsets = {},
+      tilecount = 81,
+      tiles = {}
+    },
+    {
+      name = "GlobalTileset",
+      firstgid = 163,
+      filename = "GlobalTileset.tsx"
+    }
+  },
   layers = {
     {
       type = "tilelayer",

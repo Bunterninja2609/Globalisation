@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="82">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="82">
  <editorsettings>
   <export target="India.lua" format="lua"/>
  </editorsettings>
+ <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="81" columns="9">
+  <image source="../../../../Downloads/GlobalTileset.png" width="144" height="144"/>
+ </tileset>
+ <tileset firstgid="82" name="GlobalTileset" tilewidth="16" tileheight="16" tilecount="81" columns="9">
+  <image source="../../../../Downloads/GlobalTileset.png" width="144" height="144"/>
+ </tileset>
+ <tileset firstgid="163" source="GlobalTileset.tsx"/>
  <layer id="1" name="bottom" width="64" height="64">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
