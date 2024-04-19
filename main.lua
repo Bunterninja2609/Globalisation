@@ -11,15 +11,12 @@ function love.load()
     CurrentMap = sti("maps/map.lua")
     ShowHitboxes = true
     WorldMap = love.graphics.newImage("textures/world.png")
+    MaxPlayerHealth = nil
+    DoorsAreOpen = false
     Walls = {}
     player = {}
-    player.isWasdSteering = true
-    player.body = nil
-    player.shape = nil
-    player.fixture = nil
-    player.direction = 0
-    player.directionStrength = 0
-    player.health = 100
+
+    
     joysticks = love.joystick.getJoysticks()
     joystick1X, joystick1Y, joystick2X, joystick2Y = 0, 0, 0, 0
 
@@ -29,6 +26,7 @@ function love.load()
     enterNewLevel("Map")
 end 
 function love.update(dt)
+    gDt = dt
     if #joysticks >= 1 then
         joystick1X, joystick1Y, joystick2X, joystick2Y = joysticks[1]:getAxes()
     end
@@ -40,7 +38,17 @@ function love.update(dt)
   end
         
         updateEntities(dt)
-        WorldSpace:update(dt)
+        if player.health > 0 then
+            WorldSpace:update(dt)
+        else
+            player.health = 0
+        end
+        if #Entities <= 7 then
+            player.victoryAudio:play()
+            DoorsAreOpen = true
+        else
+            DoorsAreOpen = false
+        end
         
     elseif WorldStatus == "BossFight" then
 
@@ -65,10 +73,16 @@ function love.draw()
             love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b, 1)
             drawEntities()
         love.graphics.pop()
+        drawUi(1)
+        love.graphics.setColor(63/256, 40/256, 50/256, 1)
+        love.graphics.rectangle("fill", love.graphics.getWidth() - (200 + 10), 10, 200, 20)
+        love.graphics.setColor(99/256, 198/256, 77/256, 1)
+        love.graphics.rectangle("fill", love.graphics.getWidth() - (200 + 10), 10, 200 * (player.health/MaxPlayerHealth), 20)
+        
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
     end
-    drawUi(1)
+    
 end
 function steer(object, speed, wasd)
     if wasd then
@@ -165,7 +179,7 @@ function love.keypressed(key)
     if key == "1" then
         WorldStatus = "Map"
     elseif key == "2" then
-        enterNewLevel("India")
+        enterNewLevel("America")
         WorldStatus = "InLevel"
     elseif key == "3" then
         WorldStatus = "BossFight"

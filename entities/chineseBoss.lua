@@ -63,7 +63,7 @@ function entity:update(dt, _)
         self.currentFrame = self.frames[1][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
     end
     if self.health <= 0 then
-        for i = 0, 3 do
+        for i = 0, 6 do
             spawnEntity("chineseMinion", self.x, self.y)
         end
         self.fixture:destroy()

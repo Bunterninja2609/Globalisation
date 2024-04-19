@@ -4,28 +4,33 @@ entity.x = 0
 entity.y = 0
 entity.color = {r=1, g=1, b=1}
 entity.direction = 0
-entity.speed = 200
+entity.speed = 300
 entity.isExistent = true
-entity.texture = love.graphics.newImage("textures/chineseMinion.png")
-entity.frames = newTextureSheet(entity.texture, 16, 16, 8, 2)
+entity.texture = love.graphics.newImage("textures/bullet.png")
+entity.frames = newTextureSheet(entity.texture, 16, 16, 1, 1)
 entity.frameCooldown = 0.05
-entity.invincibilityFrames = 0.1
-entity.invincibilityFramesTimer = 0.5
+entity.invincibilityFrames = 0
+entity.invincibilityFramesTimer = 0
 entity.animationTimer = 0
 entity.currentFrame = entity.frames[1][1]
-entity.range = 10
-entity.hitCooldown = 2
-entity.hitCooldownTimer = 0
+entity.range = 1
+entity.hitCooldown = 1
+entity.hitCooldownTimer = 1
 entity.damage = 10
 entity.isMoving = false
 entity.health = 30
 
-function entity:load()
+function entity:load(direction, speed)
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")
-    self.shape = love.physics.newCircleShape(4)
+    self.shape = love.physics.newCircleShape(2)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    if speed then
+        self.speed = speed
+    end
+    self.direction = direction
 end
 function entity:update(dt, _)
+    self.hitCooldownTimer = self.hitCooldownTimer - dt
     self.invincibilityFramesTimer = self.invincibilityFramesTimer - dt
     if self.invincibilityFramesTimer > 0 then
         self.color = {r=1, g=0, b=0}
@@ -36,37 +41,20 @@ function entity:update(dt, _)
     self.z = self.y
     
     local vx, vy = self.body:getLinearVelocity()
-    if math.sqrt(vx^2 + vy^2) > 0 then
-        self.isMoving = true
-    else
-        self.isMoving = false
-    end
-    if self.isMoving then
-        self.animationTimer = self.animationTimer + dt
-    end
+    self.damage = math.sqrt(vx^2 + vy^2)/10
     
     
-    self.hitCooldownTimer = self.hitCooldownTimer - dt
-        --[[ deal damage --]]
-    if love.physics.getDistance(player.fixture, self.fixture) < self.range and self.hitCooldownTimer <= 0 and player.invincibilityFramesTimer <= 0 then
+    if love.physics.getDistance(player.fixture, self.fixture) < self.range and player.invincibilityFramesTimer <= 0 then
         self.hitCooldownTimer = self.hitCooldown
         player.health = player.health - self.damage
         player.invincibilityFramesTimer = player.invincibilityFrames
+        self.health = 0
     end
-    self.hitCooldownTimer = self.hitCooldownTimer - dt
-    ---[[
     if self.hitCooldownTimer <= 0 then
-        self.direction = getDirection(self.x, self.y, player.body:getX(), player.body:getY())
-    else
-        self.direction = getDirection(player.body:getX(), player.body:getY(), self.x, self.y)
+        self.health = 0
     end
     self.direction = self.direction % (2*math.pi)
     self.x, self.y = self.body:getPosition()
-    if self.direction > (1/2) * math.pi and self.direction < (3/2) * math.pi then
-        self.currentFrame = self.frames[2][(math.floor(self.animationTimer / self.frameCooldown))%8 + 1]
-    elseif self.direction > (3/2) * math.pi or self.direction < (1/2) * math.pi then
-        self.currentFrame = self.frames[1][(math.floor(self.animationTimer / self.frameCooldown))%8 + 1]
-    end
     if self.health <= 0 then
         self.fixture:destroy()
         table.remove(Entities, _)
@@ -75,7 +63,7 @@ function entity:update(dt, _)
 end
 function entity:draw()
     love.graphics.setColor(1 * WorldColor.r * self.color.r, 1 * WorldColor.g * self.color.g, 1 * WorldColor.b * self.color.b)
-    love.graphics.draw(self.texture, self.currentFrame, self.x, self.y,0,1,1, 8, 12)
+    love.graphics.draw(self.texture, self.currentFrame, self.x, self.y, self.direction ,1,1, 8, 8)
     if love.physics.getDistance(player.fixture, self.fixture) < 100 then
         --[[ Something that is leleleleleleleellleeelleELELELELLELELELELELELELELEL EL EL EL ELL ELELEL E LE LEL EL EE E EL EE LE LE E E   and range stuff--]]
     end

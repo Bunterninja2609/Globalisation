@@ -2,24 +2,27 @@ local entity = {}
 entity.x = 0
 entity.y = 0
 entity.health = 100
+
 entity.isWasdSteering = true
+entity.victoryAudio = love.audio.newSource("audio/andrew_victory.mp3","static")
+entity.deathAudio = love.audio.newSource("audio/andrew_victory.mp3","static")
 entity.color = {r=1, g=1, b=1}
 entity.direction = 0
 entity.directionStrength = 0
 entity.movementDirection = 0
 entity.isExistent = true
-entity.texture = love.graphics.newImage("textures/wizard.png")
-entity.frames = newTextureSheet(entity.texture, 16, 16, 5, 5)
+entity.texture = love.graphics.newImage("textures/andrew.png")
+entity.frames = newTextureSheet(entity.texture, 16, 16, 4, 2)
 entity.frameCooldown = 0.2
 entity.invincibilityFrames = 0.2
-entity.invincibilityFramesTimer = 0.2
+entity.invincibilityFramesTimer = 0.1
 entity.animationTimer = 0
 entity.currentFrame = entity.frames[1][1]
 entity.range = 32
 entity.radius = 1/2*math.pi
-entity.hitCooldown = 0.5
-entity.hitCooldownTimer = 0.5
-entity.damage = 10
+entity.hitCooldown = 0.2
+entity.hitCooldownTimer = 0.2
+entity.damage = 5
 entity.isMoving = false
 
 function entity:load()
@@ -27,6 +30,7 @@ function entity:load()
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")
     self.shape = love.physics.newCircleShape(4)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.fixture:setMask(2)
     player = self
 end
 function entity:update(dt)
@@ -46,6 +50,7 @@ function entity:update(dt)
     self.z = self.y
     self.animationTimer = self.animationTimer + dt
     if player.health <= 0 then
+        self.deathAudio:play()
         gameOver()
     end
     
@@ -66,24 +71,16 @@ function entity:update(dt)
     self.movementDirection = self.movementDirection % (2*math.pi)
     self.x, self.y = self.body:getPosition()
     if self.isMoving then
-        if self.movementDirection > (1/4) * math.pi and self.movementDirection < (3/4) * math.pi then
-            self.currentFrame = self.frames[3][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
-        elseif self.movementDirection > (3/4) * math.pi and self.movementDirection < (5/4) * math.pi then
+        if self.movementDirection >= (1/2) * math.pi and self.movementDirection <= (3/2) * math.pi then
             self.currentFrame = self.frames[2][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
-        elseif self.movementDirection > (5/4) * math.pi and self.movementDirection < (7/4) * math.pi then
-            self.currentFrame = self.frames[4][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
-        elseif self.movementDirection > (5/4) * math.pi or self.movementDirection < (1/4) * math.pi then
+        elseif self.movementDirection > (3/2) * math.pi or self.movementDirection < (1/2) * math.pi then
             self.currentFrame = self.frames[1][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
         end
     else
-        if self.movementDirection > (1/4) * math.pi and self.movementDirection < (3/4) * math.pi then
-            self.currentFrame = self.frames[3][1]
-        elseif self.movementDirection > (3/4) * math.pi and self.movementDirection < (5/4) * math.pi then
-            self.currentFrame = self.frames[2][1]
-        elseif self.movementDirection > (5/4) * math.pi and self.movementDirection < (7/4) * math.pi then
-            self.currentFrame = self.frames[4][1]
-        elseif self.movementDirection > (5/4) * math.pi or self.movementDirection < (1/4) * math.pi then
-            self.currentFrame = self.frames[1][1]
+        if self.movementDirection > (1/2) * math.pi and self.movementDirection < (3/2) * math.pi then
+            self.currentFrame = self.frames[2][math.floor(1)]
+        elseif self.movementDirection > (3/2) * math.pi or self.movementDirection < (1/2) * math.pi then
+            self.currentFrame = self.frames[1][math.floor(1)]
         end
     end
     --]]

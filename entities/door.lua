@@ -1,6 +1,7 @@
 local entity = {}
 entity.x = 0
 entity.y = 0
+entity.color = {r=1, g=1, b=1}
 entity.direction = 0
 entity.doorSize = 32
 entity.isExistent = true
@@ -29,7 +30,6 @@ function entity:load(mode)
     self.fixture = love.physics.newFixture(self.body, self.shape)
 end 
 function entity:update(dt)
-    self.z = self.y
     self.animationTimer = self.animationTimer + dt
     
     self.body:setLinearVelocity(0,0)
@@ -46,11 +46,20 @@ function entity:update(dt)
     
     self.direction = self.direction % (2*math.pi)
     self.x, self.y = self.body:getPosition()
+    if DoorsAreOpen then
+        self.fixture:setCategory(2)
+        self.isClosed = false
+        self.z = 0
+    else
+        self.fixture:setCategory(1)
+        self.isClosed = true
+        self.z = self.y
+    end
     
     --]]
 end
 function entity:draw()
-    love.graphics.setColor(1,1,1,1)
+    love.graphics.setColor(1 * WorldColor.r * self.color.r, 1 * WorldColor.g * self.color.g, 1 * WorldColor.b * self.color.b)
     love.graphics.draw(self.texture, self.currentFrame, self.x, self.y, 0, 1, 1, 16, 14)
     if love.physics.getDistance(player.fixture, self.fixture) < 30 and self.isClosed then
         self.openingTimer = self.openingTimer - 0.2

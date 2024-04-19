@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 5,
-  nextobjectid = 82,
+  nextobjectid = 72,
   properties = {},
   tilesets = {},
   layers = {
@@ -332,7 +332,7 @@ return {
           type = "",
           shape = "rectangle",
           x = 320,
-          y = 720,
+          y = 624,
           width = 96,
           height = 16,
           rotation = 0,
@@ -345,7 +345,7 @@ return {
           type = "",
           shape = "rectangle",
           x = 544,
-          y = 720,
+          y = 624,
           width = 96,
           height = 16,
           rotation = 0,
@@ -552,10 +552,10 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 448,
-          y = 832,
-          width = 64,
-          height = 16,
+          x = 544,
+          y = 688,
+          width = 32,
+          height = 32,
           rotation = 0,
           visible = true,
           properties = {}
@@ -591,10 +591,10 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 544,
-          y = 720,
-          width = 16,
-          height = 80,
+          x = 384,
+          y = 688,
+          width = 32,
+          height = 32,
           rotation = 0,
           visible = true,
           properties = {}
@@ -604,36 +604,10 @@ return {
           name = "",
           type = "",
           shape = "rectangle",
-          x = 400,
-          y = 720,
-          width = 16,
-          height = 80,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 72,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 496,
-          y = 848,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 73,
-          name = "",
-          type = "",
-          shape = "rectangle",
-          x = 448,
-          y = 848,
-          width = 16,
-          height = 16,
+          x = 464,
+          y = 576,
+          width = 32,
+          height = 160,
           rotation = 0,
           visible = true,
           properties = {}
@@ -729,7 +703,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["name"] = "indian"
+            ["name"] = "chineseBoss"
           }
         },
         {
@@ -778,126 +752,6 @@ return {
           properties = {
             ["name"] = "chest",
             ["text"] = "fuck you"
-          }
-        },
-        {
-          id = 74,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 512,
-          y = 528,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 75,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 448,
-          y = 528,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 76,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 432,
-          y = 496,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 77,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 528,
-          y = 496,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 78,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 608,
-          y = 704,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 79,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 352,
-          y = 704,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 80,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 480,
-          y = 640,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
-          }
-        },
-        {
-          id = 81,
-          name = "",
-          type = "",
-          shape = "point",
-          x = 480,
-          y = 720,
-          width = 0,
-          height = 0,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["name"] = "indian"
           }
         }
       }

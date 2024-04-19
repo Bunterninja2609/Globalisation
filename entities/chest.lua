@@ -9,7 +9,7 @@ entity.currentFrame = entity.frames[1][2]
 
 function entity:load(text)
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "static")
-    self.shape = love.physics.newCircleShape(8)
+    self.shape = love.physics.newCircleShape(4)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.text = text
 end
@@ -29,7 +29,7 @@ function entity:draw()
     else
         self.currentFrame = self.frames[1][1]
     end
-    love.graphics.draw(self.texture, self.currentFrame, self.x, self.y,0,1,1, 8, 8)
+    love.graphics.draw(self.texture, self.currentFrame, self.x, self.y,0,1,1, 8, 12)
     if love.physics.getDistance(player.fixture, self.fixture) < 30 and self.isOpened then
         addUi(self.text)
     end
