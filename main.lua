@@ -68,18 +68,21 @@ function love.draw()
         love.graphics.push()
             love.graphics.scale(Scale)
             love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
-            love.graphics.setColor(1 * WorldColor.r, 0 * WorldColor.g, 0 * WorldColor.b)
-            love.graphics.circle("fill", player.body:getX() + 20 * math.cos(player.direction) * player.directionStrength, player.body:getY()  + 20 * math.sin(player.direction) * player.directionStrength, 2)
+            love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
+            CurrentMap:drawLayer(CurrentMap.layers["bottom"])
+            CurrentMap:drawLayer(CurrentMap.layers["groundLayer"])
             drawHitboxes(WorldSpace)
             love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b, 1)
             drawEntities()
+            CurrentMap:drawLayer(CurrentMap.layers["top"])
         love.graphics.pop()
         drawUi(1)
         love.graphics.setColor(63/256, 40/256, 50/256, 1)
         love.graphics.rectangle("fill", love.graphics.getWidth() - (100 + 10), 10, 100, 20)
         love.graphics.setColor(99/256, 198/256, 77/256, 1)
         love.graphics.rectangle("fill", love.graphics.getWidth() - (100 + 10), 10, 100 * (player.health/MaxPlayerHealth), 20)
-        love.graphics.draw(HealthBarOverlay,love.graphics.getWidth() - (100 + 10), 10, 2, 2)
+        love.graphics.setColor(1,1,1,1)
+        love.graphics.draw(HealthBarOverlay,love.graphics.getWidth() - (100 + 10), 10, 0, 2, 2)
         
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
@@ -181,7 +184,7 @@ function love.keypressed(key)
     if key == "1" then
         WorldStatus = "Map"
     elseif key == "2" then
-        enterNewLevel("America")
+        enterNewLevel("India")
         WorldStatus = "InLevel"
     elseif key == "3" then
         WorldStatus = "BossFight"
