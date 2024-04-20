@@ -10,7 +10,7 @@ return {
   tilewidth = 16,
   tileheight = 16,
   nextlayerid = 6,
-  nextobjectid = 80,
+  nextobjectid = 83,
   properties = {},
   tilesets = {
     {
@@ -135,7 +135,7 @@ return {
       width = 64,
       height = 64,
       id = 5,
-      name = "groundOverlay",
+      name = "groundLayer",
       class = "",
       visible = true,
       opacity = 1,
@@ -826,6 +826,32 @@ return {
           y = 568,
           width = 16,
           height = 8,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 81,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 496,
+          y = 240,
+          width = 16,
+          height = 240,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 82,
+          name = "",
+          type = "",
+          shape = "rectangle",
+          x = 448,
+          y = 240,
+          width = 16,
+          height = 240,
           rotation = 0,
           visible = true,
           properties = {}

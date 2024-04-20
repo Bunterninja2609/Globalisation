@@ -9,10 +9,28 @@ function love.load()
     ParticleImage = love.graphics.newImage("textures/particle.png")
     WorldColor = {r = 1, g = 1, b = 1}
     CurrentMap = sti("maps/map.lua")
+    SelectedLevel = 1
     ShowHitboxes = true
     WorldMap = love.graphics.newImage("textures/world.png")
     MaxPlayerHealth = nil
     DoorsAreOpen = false
+    Levels = {
+        {name = "India",
+        img = love.graphics.newImage("textures/india.png"),
+        isCompleted = false,
+        isUnlocked = true
+        },
+        {name = "America",
+        img = love.graphics.newImage("textures/america.png"),
+        isCompleted = false,
+        isUnlocked = false
+        },
+        {name = "China",
+        img = love.graphics.newImage("textures/china.png"),
+        isCompleted = false,
+        isUnlocked = false
+        }
+    }
     HealthBarOverlay = love.graphics.newImage("textures/health_bar.png")
     Walls = {}
     player = {}
@@ -32,7 +50,12 @@ function love.update(dt)
         joystick1X, joystick1Y, joystick2X, joystick2Y = joysticks[1]:getAxes()
     end
     if WorldStatus == "Map" then 
-        
+        if love.keyboard.isDown("right") then
+            SelectedLevel = (SelectedLevel - 1)%#Levels
+        end
+        if love.keyboard.isDown("left") then
+            SelectedLevel = (SelectedLevel + 1)%#Levels
+        end
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
             spawnEntity("chineseBoss", math.random(-100, 100), math.random(-100, 100))
@@ -43,6 +66,11 @@ function love.update(dt)
             WorldSpace:update(dt)
         else
             player.health = 0
+        end
+        if player.y < 300 then
+            WorldStatus = "Map"
+            Levels[(1 + SelectedLevel)% #Levels + 1].isCompleted = true
+            Levels[(2 + SelectedLevel)% #Levels + 1].isUnlocked = true
         end
         if #Entities <= 7 then
             player.victoryAudio:play()
@@ -63,6 +91,7 @@ function love.draw()
         love.graphics.setBackgroundColor(0, 1, 0)
         love.graphics.setColor(1,1,1)
         love.graphics.draw(WorldMap, 0, 0, 0, 5)
+        drawLevelSelection()
     elseif WorldStatus == "InLevel" then
         love.graphics.setBackgroundColor((50/256) * WorldColor.r, (115/256) * WorldColor.g, (69/256) * WorldColor.b)
         love.graphics.push()
@@ -74,6 +103,7 @@ function love.draw()
             drawHitboxes(WorldSpace)
             love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b, 1)
             drawEntities()
+            love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
             CurrentMap:drawLayer(CurrentMap.layers["top"])
         love.graphics.pop()
         drawUi(1)
@@ -181,13 +211,9 @@ function updateEntities(dt)
 end
 
 function love.keypressed(key)
-    if key == "1" then
-        WorldStatus = "Map"
-    elseif key == "2" then
-        enterNewLevel("India")
+    if key == "return" then
+        enterNewLevel(Levels[(1 + SelectedLevel)% #Levels + 1].name)
         WorldStatus = "InLevel"
-    elseif key == "3" then
-        WorldStatus = "BossFight"
     end
 end
 function drawHitboxes(world)
@@ -267,4 +293,36 @@ function gameOver()
         WorldStatus = "Map"
         WorldColor = {r = 1, g = 1, b = 1}
     end
+end
+function drawLevelSelection()
+    --love.graphics.rectangle("line", love.graphics.getWidth()/2 - 130, 10, 55, 100)
+    if Levels[(0 + SelectedLevel)% #Levels + 1].isUnlocked then
+        love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
+        if Levels[(0 + SelectedLevel)% #Levels + 1].isCompleted then
+            love.graphics.setColor(0.5 * WorldColor.r, 1 * WorldColor.g, 0.5 * WorldColor.b)
+        end
+    else
+        love.graphics.setColor(0.5 * WorldColor.r, 0.5 * WorldColor.g, 0.5 * WorldColor.b)
+    end
+    love.graphics.draw(Levels[(0 + SelectedLevel)% #Levels + 1].img, love.graphics.getWidth()/2 - 130, 10 + 25, 0, 55/Levels[(0 + SelectedLevel)% #Levels + 1].img:getWidth())
+    --love.graphics.rectangle("line", love.graphics.getWidth()/2 - 55, 10, 110, 100)
+    if Levels[(1 + SelectedLevel)% #Levels + 1].isUnlocked then
+        love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
+        if Levels[(1 + SelectedLevel)% #Levels + 1].isCompleted then
+            love.graphics.setColor(0.5 * WorldColor.r, 1 * WorldColor.g, 0.5 * WorldColor.b)
+        end
+    else
+        love.graphics.setColor(0.5 * WorldColor.r, 0.5 * WorldColor.g, 0.5 * WorldColor.b)
+    end
+    love.graphics.draw(Levels[(1 + SelectedLevel)% #Levels + 1].img, love.graphics.getWidth()/2 - 55, 10, 0, 110/Levels[(1 + SelectedLevel)% #Levels + 1].img:getWidth())
+    --love.graphics.rectangle("line", love.graphics.getWidth()/2 + 75, 10, 55, 100)
+    if Levels[(2 + SelectedLevel)% #Levels + 1].isUnlocked then
+        love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
+        if Levels[(2 + SelectedLevel)% #Levels + 1].isCompleted then
+            love.graphics.setColor(0.5 * WorldColor.r, 1 * WorldColor.g, 0.5 * WorldColor.b)
+        end
+    else
+        love.graphics.setColor(0.5 * WorldColor.r, 0.5 * WorldColor.g, 0.5 * WorldColor.b)
+    end
+    love.graphics.draw(Levels[(2 + SelectedLevel)% #Levels + 1].img, love.graphics.getWidth()/2 + 75, 10 + 25, 0, 55/Levels[(2 + SelectedLevel)% #Levels + 1].img:getWidth())
 end

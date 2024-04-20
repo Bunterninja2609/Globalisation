@@ -20,7 +20,7 @@ entity.hitCooldown = 4
 entity.hitCooldownTimer = 0
 entity.damage = 10
 entity.isMoving = false
-entity.health = 70
+entity.health = 50
 
 function entity:load()
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")
@@ -54,7 +54,7 @@ function entity:update(dt, _)
         --[[ deal damage --]]
     if self.hitCooldownTimer <= 0 and player.invincibilityFramesTimer <= 0 then
         for i = 0, 0 do
-            spawnEntity("bullet", self.x, self.y, self.aimingDirection, 500)
+            spawnEntity("cow_shit", self.x, self.y, self.aimingDirection, 300)
         end
         self.hitCooldownTimer = self.hitCooldown
     end
