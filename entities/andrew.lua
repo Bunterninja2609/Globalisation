@@ -5,7 +5,7 @@ entity.health = 100
 
 entity.isWasdSteering = true
 entity.victoryAudio = love.audio.newSource("audio/andrew_victory.mp3","static")
-entity.deathAudio = love.audio.newSource("audio/andrew_victory.mp3","static")
+entity.deathAudio = love.audio.newSource("audio/andrew_death.mp3","static")
 entity.color = {r=1, g=1, b=1}
 entity.direction = 0
 entity.directionStrength = 0

@@ -13,6 +13,7 @@ function love.load()
     WorldMap = love.graphics.newImage("textures/world.png")
     MaxPlayerHealth = nil
     DoorsAreOpen = false
+    HealthBarOverlay = love.graphics.newImage("textures/health_bar.png")
     Walls = {}
     player = {}
 
@@ -75,9 +76,10 @@ function love.draw()
         love.graphics.pop()
         drawUi(1)
         love.graphics.setColor(63/256, 40/256, 50/256, 1)
-        love.graphics.rectangle("fill", love.graphics.getWidth() - (200 + 10), 10, 200, 20)
+        love.graphics.rectangle("fill", love.graphics.getWidth() - (100 + 10), 10, 100, 20)
         love.graphics.setColor(99/256, 198/256, 77/256, 1)
-        love.graphics.rectangle("fill", love.graphics.getWidth() - (200 + 10), 10, 200 * (player.health/MaxPlayerHealth), 20)
+        love.graphics.rectangle("fill", love.graphics.getWidth() - (100 + 10), 10, 100 * (player.health/MaxPlayerHealth), 20)
+        love.graphics.draw(HealthBarOverlay,love.graphics.getWidth() - (100 + 10), 10, 2, 2)
         
     elseif WorldStatus == "BossFight" then
         love.graphics.setBackgroundColor(1, 0.5, 0)
@@ -255,9 +257,9 @@ function getDirection(x1, y1, x2, y2)
     return math.atan2(x2 - x1, y2 - y1) - 1/2 * math.pi
 end
 function gameOver()
-    WorldColor.r = WorldColor.r - 0.01
-    WorldColor.g = WorldColor.g - 0.01
-    WorldColor.b = WorldColor.b - 0.01
+    WorldColor.r = WorldColor.r - 0.002
+    WorldColor.g = WorldColor.g - 0.002
+    WorldColor.b = WorldColor.b - 0.002
     if WorldColor.r <= 0 and WorldColor.g <= 0 and WorldColor.b <= 0 then
         WorldStatus = "Map"
         WorldColor = {r = 1, g = 1, b = 1}
