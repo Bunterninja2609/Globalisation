@@ -4,7 +4,7 @@ entity.x = 0
 entity.y = 0
 entity.color = {r=1, g=1, b=1}
 entity.direction = 0
-entity.speed = 20
+entity.speed = 50
 entity.isExistent = true
 entity.texture = love.graphics.newImage("textures/chineseBoss.png")
 entity.frames = newTextureSheet(entity.texture, 20, 20, 4, 2)
@@ -16,14 +16,25 @@ entity.currentFrame = entity.frames[1][1]
 entity.range = 16
 entity.hitCooldown = 1
 entity.hitCooldownTimer = 1
-entity.damage = 1
+entity.damage = 10
 entity.isMoving = false
-entity.health = 200
+entity.health = 250
+
+
+
 
 function entity:load()
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")
     self.shape = love.physics.newCircleShape(4)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.particleSystem = love.graphics.newParticleSystem(love.graphics.newImage("textures/particle.png"), 64)
+    self.particleSystem = love.graphics.newParticleSystem(love.graphics.newImage("textures/particle.png"), 128)
+    self.particleSystem:setColors(1,0,0,1, 0.1,0,0,1)
+    self.particleSystem:setParticleLifetime(0.1, 1)
+    
+    self.particleSystem:setSpeed(30,40)
+    self.particleSystem:setSizes(1, 2)
+    self.particleSystem:setSpread(math.pi)
 end
 function entity:update(dt, _)
     self.invincibilityFramesTimer = self.invincibilityFramesTimer - dt
@@ -63,6 +74,7 @@ function entity:update(dt, _)
         self.currentFrame = self.frames[1][(math.floor(self.animationTimer / self.frameCooldown))%4 + 1]
     end
     if self.health <= 0 then
+        player.health = player.health + (100 - player.health) * 1/2
         for i = 0, 6 do
             spawnEntity("chineseMinion", self.x, self.y)
         end
@@ -70,10 +82,13 @@ function entity:update(dt, _)
         table.remove(Entities, _)
 
     end
+    self.particleSystem:setPosition(self.x, self.y)
+    self.particleSystem:update(dt)
     --]]
 end
 function entity:draw()
     love.graphics.setColor(1 * WorldColor.r * self.color.r, 1 * WorldColor.g * self.color.g, 1 * WorldColor.b * self.color.b)
+    love.graphics.draw(self.particleSystem, 0, 0) 
     love.graphics.draw(self.texture, self.currentFrame, self.x, self.y,0,1,1, 8, 12)
     if love.physics.getDistance(player.fixture, self.fixture) < 100 then
         --[[ Something that is leleleleleleleellleeelleELELELELLELELELELELELELELEL EL EL EL ELL ELELEL E LE LEL EL EE E EL EE LE LE E E   and range stuff--]]

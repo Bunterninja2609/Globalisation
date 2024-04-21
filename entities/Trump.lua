@@ -26,6 +26,13 @@ function entity:load()
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")
     self.shape = love.physics.newCircleShape(4)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.particleSystem = love.graphics.newParticleSystem(love.graphics.newImage("textures/particle.png"), 128)
+    self.particleSystem:setColors(1,0,0,1, 0.1,0,0,1)
+    self.particleSystem:setParticleLifetime(0.1, 1)
+    
+    self.particleSystem:setSpeed(30,40)
+    self.particleSystem:setSizes(1, 2)
+    self.particleSystem:setSpread(math.pi)
     
 end
 function entity:update(dt, _)
@@ -87,10 +94,14 @@ function entity:update(dt, _)
         self.fixture:destroy()
         table.remove(Entities, _)
     end
+    self.particleSystem:setPosition(self.x, self.y)
+    self.particleSystem:update(dt)
+    
     --]]
 end
 function entity:draw()
     love.graphics.setColor(1 * WorldColor.r * self.color.r, 1 * WorldColor.g * self.color.g, 1 * WorldColor.b * self.color.b)
+    love.graphics.draw(self.particleSystem, 0, 0)
     love.graphics.draw(self.texture, self.currentFrame, self.x, self.y,0,1,1, 8, 12)
     if love.physics.getDistance(player.fixture, self.fixture) < 100 then
         --[[ Something that is leleleleleleleellleeelleELELELELLELELELELELELELELEL EL EL EL ELL ELELEL E LE LEL EL EE E EL EE LE LE E E   and range stuff--]]

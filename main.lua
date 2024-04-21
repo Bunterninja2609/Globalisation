@@ -3,13 +3,14 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setNewFont(20)
     WorldSpace = love.physics.newWorld(0, 0)
+    BackgroundMusic = love.audio.newSource("audio/background_music.mp3","static")
     Scale = 4
     love.physics.setMeter(1)
     WorldStatus = "Map"
     ParticleImage = love.graphics.newImage("textures/particle.png")
     WorldColor = {r = 1, g = 1, b = 1}
     CurrentMap = sti("maps/map.lua")
-    SelectedLevel = 1
+    SelectedLevel = 2
     ShowHitboxes = true
     WorldMap = love.graphics.newImage("textures/world.png")
     MaxPlayerHealth = nil
@@ -49,16 +50,17 @@ function love.update(dt)
     if #joysticks >= 1 then
         joystick1X, joystick1Y, joystick2X, joystick2Y = joysticks[1]:getAxes()
     end
+    BackgroundMusic:play()
     if WorldStatus == "Map" then 
-        if love.keyboard.isDown("right") then
+        if love.keyboard.isDown("left") then
             SelectedLevel = (SelectedLevel - 1)%#Levels
         end
-        if love.keyboard.isDown("left") then
+        if love.keyboard.isDown("right") then
             SelectedLevel = (SelectedLevel + 1)%#Levels
         end
     elseif WorldStatus == "InLevel" then
         if love.keyboard.isDown("space") then
-            spawnEntity("chineseBoss", math.random(-100, 100), math.random(-100, 100))
+           -- spawnEntity("chineseBoss", math.random(-100, 100), math.random(-100, 100))
   end
         
         updateEntities(dt)
@@ -97,13 +99,13 @@ function love.draw()
         love.graphics.push()
             love.graphics.scale(Scale)
             love.graphics.translate(-player.body:getX() + love.graphics.getWidth()/(Scale*2), -player.body:getY() + love.graphics.getHeight()/(Scale*2))
-            love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
+            love.graphics.setColor(0.9 * WorldColor.r, 0.9 * WorldColor.g, 0.9 * WorldColor.b)
             CurrentMap:drawLayer(CurrentMap.layers["bottom"])
             CurrentMap:drawLayer(CurrentMap.layers["groundLayer"])
             drawHitboxes(WorldSpace)
             love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b, 1)
             drawEntities()
-            love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b)
+            love.graphics.setColor(0.9 * WorldColor.r, 0.9 * WorldColor.g, 0.9 * WorldColor.b)
             CurrentMap:drawLayer(CurrentMap.layers["top"])
         love.graphics.pop()
         drawUi(1)
@@ -136,7 +138,6 @@ function steer(object, speed, wasd)
         end
             object:setLinearVelocity(velocityX * speed, velocityY * speed)
             player.movementDirection = math.atan2(velocityY, velocityX)
-            player.direction = math.atan2( (love.mouse:getX() / Scale - love.graphics.getWidth()/2/ Scale), (love.mouse:getY()/ Scale - love.graphics.getHeight()/2/ Scale))
             if love.mouse:isDown(1) then
                 player.directionStrength = player.directionStrength + 1
             else
@@ -211,7 +212,7 @@ function updateEntities(dt)
 end
 
 function love.keypressed(key)
-    if key == "return" then
+    if key == "return" and (Levels[(1 + SelectedLevel)% #Levels + 1].isUnlocked or true) then
         enterNewLevel(Levels[(1 + SelectedLevel)% #Levels + 1].name)
         WorldStatus = "InLevel"
     end
@@ -286,6 +287,7 @@ function getDirection(x1, y1, x2, y2)
     return math.atan2(x2 - x1, y2 - y1) - 1/2 * math.pi
 end
 function gameOver()
+    BackgroundMusic:pause()
     WorldColor.r = WorldColor.r - 0.002
     WorldColor.g = WorldColor.g - 0.002
     WorldColor.b = WorldColor.b - 0.002

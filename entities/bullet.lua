@@ -24,6 +24,12 @@ function entity:load(direction, speed)
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")
     self.shape = love.physics.newCircleShape(2)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.particleSystem = love.graphics.newParticleSystem(love.graphics.newImage("textures/particle.png"), 64)
+    self.particleSystem:setColors(1,0,0,1, 1,0.5,0,1)
+    self.particleSystem:setParticleLifetime(0.5, 1)
+    self.particleSystem:setSpeed(100,200)
+    self.particleSystem:setSizes(1, 2)
+    self.particleSystem:setSpread(0.3)
     if speed then
         self.speed = speed
     end
