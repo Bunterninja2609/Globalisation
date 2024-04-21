@@ -212,7 +212,7 @@ function updateEntities(dt)
 end
 
 function love.keypressed(key)
-    if key == "return" and (Levels[(1 + SelectedLevel)% #Levels + 1].isUnlocked or true) then
+    if key == "return" and (Levels[(1 + SelectedLevel)% #Levels + 1].isUnlocked) then
         enterNewLevel(Levels[(1 + SelectedLevel)% #Levels + 1].name)
         WorldStatus = "InLevel"
     end
