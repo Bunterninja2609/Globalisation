@@ -102,7 +102,7 @@ function love.draw()
             love.graphics.setColor(0.9 * WorldColor.r, 0.9 * WorldColor.g, 0.9 * WorldColor.b)
             CurrentMap:drawLayer(CurrentMap.layers["bottom"])
             CurrentMap:drawLayer(CurrentMap.layers["groundLayer"])
-            drawHitboxes(WorldSpace)
+            --drawHitboxes(WorldSpace)
             love.graphics.setColor(1 * WorldColor.r, 1 * WorldColor.g, 1 * WorldColor.b, 1)
             drawEntities()
             love.graphics.setColor(0.9 * WorldColor.r, 0.9 * WorldColor.g, 0.9 * WorldColor.b)
@@ -210,7 +210,7 @@ function updateEntities(dt)
         entity:update(dt, _)
     end
 end
-
+--hehehehehehehehhehehheheheehhehehehehehhehehehehhehehehehhehehehehhehehehehhehehehehehheheheheheheehheheh ehhe heh ehe he hehe he h heh eh e he heh eh he he heh he he he eh h eheh he he h hehe h eh 
 function love.keypressed(key)
     if key == "return" and (Levels[(1 + SelectedLevel)% #Levels + 1].isUnlocked) then
         enterNewLevel(Levels[(1 + SelectedLevel)% #Levels + 1].name)
