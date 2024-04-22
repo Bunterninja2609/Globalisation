@@ -885,7 +885,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "China benefits most from Globalization. They export an incredible amount of goods and are therfore our biggest enemy."
           }
         },
         {
@@ -901,7 +901,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "Our next Opponent will be China. India was very strong."
           }
         },
         {
@@ -917,7 +917,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "Since India was that strong, im afraid of how strong China is..."
           }
         },
         {

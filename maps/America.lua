@@ -963,7 +963,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "Ahh, yeah right. competition. We have plenty of natural resourcess, but we are still not making any money on Globalization."
           }
         },
         {
@@ -979,7 +979,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "Hmm... what was that? We just wanted to start a buisness and participate in the global Market. Why did they just attack us?"
           }
         },
         {
@@ -995,7 +995,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "That probably was America. Our next opponent will certainly be India. We have to prepare well, since after China, India is the strongest country and our biggest enemy in the fight for integration in the globalization."
           }
         }
       }

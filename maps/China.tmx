@@ -291,21 +291,21 @@
   <object id="64" x="752" y="512">
    <properties>
     <property name="name" value="chest"/>
-    <property name="text" value="fuck you"/>
+    <property name="text" value="Since we actually have really good natural resources, we should make use of them!"/>
    </properties>
    <point/>
   </object>
   <object id="65" x="272" y="512">
    <properties>
     <property name="name" value="chest"/>
-    <property name="text" value="fuck you"/>
+    <property name="text" value="YIPPIE, WE HAVE DEFEATED CHINA! But... what now?"/>
    </properties>
    <point/>
   </object>
   <object id="66" x="480" y="384">
    <properties>
     <property name="name" value="chest"/>
-    <property name="text" value="fuck you"/>
+    <property name="text" value="fuck youWe also have enough money to start a business, so now, only thing left is a good business idea that will interest people internationally and worldwide ! :D"/>
    </properties>
    <point/>
   </object>

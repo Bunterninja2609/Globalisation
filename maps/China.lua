@@ -963,7 +963,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "Since we actually have really good natural resources, we should make use of them!"
           }
         },
         {
@@ -979,7 +979,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "YIPPIE, WE HAVE DEFEATED CHINA! But... what now?"
           }
         },
         {
@@ -995,7 +995,7 @@ return {
           visible = true,
           properties = {
             ["name"] = "chest",
-            ["text"] = "fuck you"
+            ["text"] = "fuck youWe also have enough money to start a business, so now, only thing left is a good business idea that will interest people internationally and worldwide ! :D"
           }
         }
       }
