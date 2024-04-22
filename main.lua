@@ -43,7 +43,7 @@ function love.load()
     Entities = {}
     UI = {}
     
-    enterNewLevel("Map")
+    love.window.setMode(WorldMap:getWidth()*5, WorldMap:getHeight()*5, {fullscreen=true, fullscreentype="exclusive"})
 end 
 function love.update(dt)
     gDt = dt
@@ -89,10 +89,10 @@ function love.update(dt)
 end
 function love.draw()
     if WorldStatus == "Map" then 
-        love.window.setMode(WorldMap:getWidth()*5, WorldMap:getHeight()*5)
-        love.graphics.setBackgroundColor(0, 1, 0)
+        
+        love.graphics.setBackgroundColor(4/255, 132/255, 209/255)
         love.graphics.setColor(1,1,1)
-        love.graphics.draw(WorldMap, 0, 0, 0, 5)
+        love.graphics.draw(WorldMap, love.graphics.getWidth()/2 - (WorldMap:getWidth()/2)*5, 0, 0, 5)
         drawLevelSelection()
     elseif WorldStatus == "InLevel" then
         love.graphics.setBackgroundColor((50/256) * WorldColor.r, (115/256) * WorldColor.g, (69/256) * WorldColor.b)

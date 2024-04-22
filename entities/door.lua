@@ -21,8 +21,12 @@ function entity:load(mode)
     self.mode = mode[1]
     if self.mode == "left" or self.mode == "right" then
         self.shape = love.physics.newRectangleShape(4, self.doorSize)
+        self.texture = love.graphics.newImage("textures/gate 2.png")
+        self.frames = newTextureSheet(entity.texture, 16, 32, 1, 2)
     elseif self.mode == "up" or self.mode == "down" then
         self.shape = love.physics.newRectangleShape(self.doorSize, 4)
+        self.texture = love.graphics.newImage("textures/gate.png")
+        self.frames = newTextureSheet(entity.texture, 32, 16, 1, 5)
     else
         self.shape = love.physics.newCircleShape(1)
     end
@@ -60,7 +64,7 @@ function entity:update(dt)
 end
 function entity:draw()
     love.graphics.setColor(1 * WorldColor.r * self.color.r, 1 * WorldColor.g * self.color.g, 1 * WorldColor.b * self.color.b)
-    love.graphics.draw(self.texture, self.currentFrame, self.x, self.y, 0, 1, 1, 16, 14)
+    
     if love.physics.getDistance(player.fixture, self.fixture) < 30 and self.isClosed then
         self.openingTimer = self.openingTimer - 0.2
         if self.openingTimer < 0 then
@@ -68,11 +72,15 @@ function entity:draw()
         end
     else 
         self.openingTimer = self.openingTimer + 0.2
-        if self.openingTimer > 4 then
+        if self.openingTimer > 4 and (self.mode == "up" or self.mode == "down") then
             self.openingTimer = 4
+            love.graphics.draw(self.texture, self.currentFrame, self.x, self.y, 0, 1, 1, 16, 14)
+        elseif self.openingTimer > 1 and (self.mode == "left" or self.mode == "right") then
+            self.openingTimer = 1
+            love.graphics.draw(self.texture, self.currentFrame, self.x, self.y, 0, 1, 1, 14, 16)
         end
     end
-    self.currentFrame = self.frames[math.floor(self.openingTimer) + 1][1]
+    self.currentFrame = self.frames[math.floor(self.openingTimer)+1][1]
     
 end
 return entity
