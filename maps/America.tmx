@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="82">
  <editorsettings>
-  <export format="lua"/>
+  <export target="America.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" name="TheOnlyTilesetIAmWillingToUse" tilewidth="16" tileheight="16" tilecount="81" columns="9">
   <image source="../textures/GlobalTileset.png" width="144" height="144"/>
@@ -268,14 +268,14 @@
    </properties>
    <point/>
   </object>
-  <object id="21" x="640" y="544">
+  <object id="21" x="640" y="528">
    <properties>
     <property name="name" value="door"/>
     <property name="orientation" value="right"/>
    </properties>
    <point/>
   </object>
-  <object id="22" x="320" y="544">
+  <object id="22" x="320" y="528">
    <properties>
     <property name="name" value="door"/>
     <property name="orientation" value="left"/>

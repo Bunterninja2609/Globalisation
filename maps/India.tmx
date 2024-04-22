@@ -262,14 +262,14 @@
    </properties>
    <point/>
   </object>
-  <object id="21" x="640" y="544">
+  <object id="21" x="640" y="528">
    <properties>
     <property name="name" value="door"/>
     <property name="orientation" value="right"/>
    </properties>
    <point/>
   </object>
-  <object id="22" x="320" y="544">
+  <object id="22" x="320" y="528">
    <properties>
     <property name="name" value="door"/>
     <property name="orientation" value="left"/>

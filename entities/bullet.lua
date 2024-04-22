@@ -47,7 +47,7 @@ function entity:update(dt, _)
     self.z = self.y
     
     local vx, vy = self.body:getLinearVelocity()
-    self.damage = math.sqrt(vx^2 + vy^2)/10
+    self.damage = math.sqrt(vx^2 + vy^2)/20
     
     
     if love.physics.getDistance(player.fixture, self.fixture) < self.range and player.invincibilityFramesTimer <= 0 then
