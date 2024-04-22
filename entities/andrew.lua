@@ -19,12 +19,12 @@ entity.invincibilityFramesTimer = 0.1
 entity.hiteffectTexture = love.graphics.newImage("textures/hit.png")
 entity.hiteffectTextureFrames = newTextureSheet(entity.hiteffectTexture, 32, 32, 1, 4)
 entity.hiteffectTextureFrame = entity.hiteffectTextureFrames[4][1]
-entity.hiteffectTextureFrameTimer = 0
+entity.hiteffectTextureFrameTimer = 10
 
 entity.dashTexture = love.graphics.newImage("textures/dash.png")
 entity.dashTextureFrames = newTextureSheet(entity.dashTexture, 16, 16, 1, 4)
 entity.dashTextureFrame = entity.dashTextureFrames[4][1]
-entity.dashTextureFrameTimer = 0
+entity.dashTextureFrameTimer = 10
 entity.dashCooldown = 0.2
 entity.dashCooldownTimer = 0
 

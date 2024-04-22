@@ -16,13 +16,13 @@ function love.load()
     MaxPlayerHealth = nil
     DoorsAreOpen = false
     Levels = {
-        {name = "India",
-        img = love.graphics.newImage("textures/india.png"),
+        {name = "America",
+        img = love.graphics.newImage("textures/america.png"),
         isCompleted = false,
         isUnlocked = true
         },
-        {name = "America",
-        img = love.graphics.newImage("textures/america.png"),
+        {name = "India",
+        img = love.graphics.newImage("textures/india.png"),
         isCompleted = false,
         isUnlocked = false
         },
@@ -89,7 +89,6 @@ function love.update(dt)
 end
 function love.draw()
     if WorldStatus == "Map" then 
-        
         love.graphics.setBackgroundColor(4/255, 132/255, 209/255)
         love.graphics.setColor(1,1,1)
         love.graphics.draw(WorldMap, love.graphics.getWidth()/2 - (WorldMap:getWidth()/2)*5, 0, 0, 5)

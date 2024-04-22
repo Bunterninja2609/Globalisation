@@ -20,7 +20,7 @@ entity.hitCooldown = 4
 entity.hitCooldownTimer = 0
 entity.damage = 10
 entity.isMoving = false
-entity.health = 120
+entity.health = 100
 
 function entity:load()
     self.body = love.physics.newBody(WorldSpace, self.x, self.y, "dynamic")

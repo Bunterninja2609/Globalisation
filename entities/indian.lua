@@ -4,7 +4,7 @@ entity.x = 0
 entity.y = 0
 entity.color = {r=1, g=1, b=1}
 entity.direction = 0
-entity.speed = 150
+entity.speed = 100
 entity.isExistent = true
 entity.texture = love.graphics.newImage("textures/indian.png")
 entity.frames = newTextureSheet(entity.texture, 16, 16, 4, 2)
@@ -16,7 +16,7 @@ entity.currentFrame = entity.frames[1][1]
 entity.range = 10
 entity.hitCooldown = 10
 entity.hitCooldownTimer = 0
-entity.damage = 5
+entity.damage = 10
 entity.isMoving = false
 entity.health = 30
 entity.movementTimer = 0
