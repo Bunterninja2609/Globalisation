@@ -186,7 +186,6 @@ function enterNewLevel(map, playerX, playerY)
         love = 0
     end
 end
-
 function spawnEntity(type, x, y, ...)
     local entityPrefab = require("Entities/".. type)  -- Load the entity module
     local entity = {}                   -- Create a new table for the entity instance
